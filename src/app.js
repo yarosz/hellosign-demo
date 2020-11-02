@@ -8,7 +8,7 @@ class HelloSignEmbedded extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      data: {}
+      data: []
     }
   }
 
@@ -44,7 +44,7 @@ class HelloSignEmbedded extends React.Component {
           <h1>Title </h1>
           <h3>Subtitle</h3>
           <div>
-            {data}
+            AccountID: {data.account.account_id}
           </div>
         </>
       );

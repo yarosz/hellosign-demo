@@ -7,18 +7,10 @@ require('dotenv').config();
 const app = express();
 const port = 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
-// app.get('/', (req, res) => {
-//   res.send('Hello from express!')
-// })
 
 app.get('/api/test', (req, res) => {
   axios.get(`https://${process.env.HELLOSIGN_API_KEY}:@api.hellosign.com/v3/account`)
