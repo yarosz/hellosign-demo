@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import Form from './form.jsx';
 
 class HelloSignEmbedded extends React.Component {
   constructor(props) {
@@ -8,8 +9,21 @@ class HelloSignEmbedded extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      data: []
+      data: [],
+      value: ''
     }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('A name was submitted: ' + this.state.value);
+    event.preventDefault();
   }
 
   componentDidMount() {
@@ -46,6 +60,13 @@ class HelloSignEmbedded extends React.Component {
           <div>
             AccountID: {data.account.account_id}
           </div>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Name:
+              <input type="text" value={this.state.value} onChange={this.handleChange} />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
         </>
       );
     }
