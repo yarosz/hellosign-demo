@@ -2,9 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
-const API_KEY = '3c65a27bcce6fa382ec78037629ca24caeebd7b99ca20cdd38df6284baa77c59';
 const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 // })
 
 app.get('/api/test', (req, res) => {
-  axios.get(`https://${API_KEY}:@api.hellosign.com/v3/account`)
+  axios.get(`https://${process.env.HELLOSIGN_API_KEY}:@api.hellosign.com/v3/account`)
   .then((data) => {
     res.send(data.data)
     console.log('node', data.data);
