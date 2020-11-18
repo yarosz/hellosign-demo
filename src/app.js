@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Form from './form.jsx';
+import HelloSign from 'hellosign-embedded';
+
+const client = new HelloSign();
+
 
 class HelloSignEmbedded extends React.Component {
   constructor(props) {
@@ -10,7 +14,8 @@ class HelloSignEmbedded extends React.Component {
       error: null,
       isLoaded: false,
       data: [],
-      value: ''
+      value: '',
+      claimUrl: "https:\/\/embedded.hellosign.com\/prep-and-send\/embedded-request?cached_params_token=f461071145d759d6bd45d6808ded06f9"
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -27,14 +32,15 @@ class HelloSignEmbedded extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:3000/api/test')
+    axios.get('http://localhost:3000/api/embedded_request')
       // .then(res => res.json())
       .then(
         (result) => {
           console.log(result.data)
           this.setState({
             isLoaded: true,
-            data: result.data
+            data: result.data,
+            claimUrl: result.data.unclaimed_draft.claim_url
           });
         }
       )
@@ -47,7 +53,7 @@ class HelloSignEmbedded extends React.Component {
   }
 
   render() {
-    const { error, isLoaded, data } = this.state;
+    const { error, isLoaded, data , value, claimUrl } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -58,15 +64,20 @@ class HelloSignEmbedded extends React.Component {
           <h1>Title </h1>
           <h3>Subtitle</h3>
           <div>
-            AccountID: {data.account.account_id}
+            ClaimUrl: {claimUrl}
           </div>
           <form onSubmit={this.handleSubmit}>
             <label>
               Name:
-              <input type="text" value={this.state.value} onChange={this.handleChange} />
+              <input type="text" value={value} onChange={this.handleChange} />
             </label>
             <input type="submit" value="Submit" />
           </form>
+
+          {client.open(claimUrl,
+      { clientId: '60f263538a0ebaf73b1e3cc745e6d787',
+        skipDomainVerification: false
+    })}
         </>
       );
     }
